@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <body>
+      <script>solve_sudoku(board):
+    # Find the empty cell with the fewest valid options
+    best_cell = None
+    best_options = None
+
+    for r in range(9):
+        for c in range(9):
+            if board[r][c] == 0:
+                options = [
+                    n for n in range(1, 10)
+                    if valid(board, r, c, n)
+                ]
+
+                if not options:
+                    return False
+
+                if best_options is None or len(options) < len(best_options):
+                    best_cell = (r, c)
+                    best_options = options
+
+    if best_cell is None:
+        return True
+
+    r, c = best_cell
+
+    for n in best_options:
+        board[r][c] = n
+
+        if solve_sudoku(board):
+            return True
+
+        board[r][c] = 0
+
+    return False
+
+
+def valid(board, r, c, n):
+    if n in board[r]:
+        return False
+
+    if any(board[i][c] == n for i in range(9)):
+        return False
+
+    box_r, box_c = (r // 3) * 3, (c // 3) * 3
+
+    for i in range(box_r, box_r + 3):
+        for j in range(box_c, box_c + 3):
+            if board[i][j] == n:
+                return False
+
+    return True
+      </script>
+  </body>
+ </head>
+</html>
